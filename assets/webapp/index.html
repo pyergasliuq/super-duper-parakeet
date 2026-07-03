@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pweper Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--tg-theme-bg-color, #1a1a2e);
+            color: var(--tg-theme-text-color, #eee);
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .header { text-align: center; padding: 20px 0; }
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #16213e);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .card:active { transform: scale(0.95); }
+        .card .icon { font-size: 32px; margin-bottom: 8px; }
+        .card .title { font-size: 14px; font-weight: 600; }
+        .card .desc { font-size: 11px; opacity: 0.6; margin-top: 4px; }
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .btn-primary {
+            background: var(--tg-theme-button-color, #5c6bc0);
+            color: var(--tg-theme-button-text-color, #fff);
+        }
+        .btn:active { opacity: 0.7; }
+        .status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+        .status-ok { background: rgba(76,175,80,0.2); color: #4caf50; }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            color: var(--tg-theme-text-color, #eee);
+            font-size: 15px;
+            margin-top: 8px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pweper Bot</h1>
+        <p style="opacity:0.5; font-size:13px; margin-top:4px;">Обработка игровых ассетов</p>
+    </div>
+
+    <div class="section-title">Быстрые действия</div>
+    <div class="grid">
+        <div class="card" onclick="openBot('/help')"><div class="icon">📖</div><div class="title">Справка</div></div>
+        <div class="card" onclick="openBot('/mysub')"><div class="icon">💎</div><div class="title">Подписка</div></div>
+        <div class="card" onclick="openBot('/settings')"><div class="icon">⚙️</div><div class="title">Настройки</div></div>
+        <div class="card" onclick="openBot('/top')"><div class="icon">🏆</div><div class="title">Топ</div></div>
+        <div class="card" onclick="openBot('/randcolor')"><div class="icon">🎲</div><div class="title">Цвет</div></div>
+        <div class="card" onclick="openBot('/ref')"><div class="icon">👥</div><div class="title">Реферал</div></div>
+    </div>
+
+    <div class="section-title">Фильтры</div>
+    <div class="grid">
+        <div class="card" onclick="openBot('/filters blur 50')"><div class="icon">🌫</div><div class="title">Blur</div></div>
+        <div class="card" onclick="openBot('/filters sharpen 50')"><div class="icon">🔪</div><div class="title">Sharpen</div></div>
+        <div class="card" onclick="openBot('/filters grayscale')"><div class="icon">⚫</div><div class="title">Grayscale</div></div>
+        <div class="card" onclick="openBot('/filters sepia')"><div class="icon">📷</div><div class="title">Sepia</div></div>
+        <div class="card" onclick="openBot('/filters vignette 60')"><div class="icon">🔮</div><div class="title">Vignette</div></div>
+        <div class="card" onclick="openBot('/filters grain 40')"><div class="icon">📺</div><div class="title">Grain</div></div>
+        <div class="card" onclick="openBot('/filters threshold 50')"><div class="icon">⚪</div><div class="title">Threshold</div></div>
+        <div class="card" onclick="openBot('/filters dither')"><div class="icon">🔲</div><div class="title">Dither</div></div>
+        <div class="card" onclick="openBot('/filters negate')"><div class="icon">🔄</div><div class="title">Negate</div></div>
+    </div>
+
+    <div class="section-title">Конвертеры</div>
+    <div class="grid">
+        <div class="card" onclick="openBot('/txd_info')"><div class="icon">📦</div><div class="title">TXD Info</div></div>
+        <div class="card" onclick="openBot('/timecyc_preset')"><div class="icon">🌅</div><div class="title">TimeCyc</div></div>
+        <div class="card" onclick="openBot('/img2webp')"><div class="icon">🌐</div><div class="title">WebP</div></div>
+        <div class="card" onclick="openBot('/pvr2png')"><div class="icon">📱</div><div class="title">PVR→PNG</div></div>
+    </div>
+
+    <div class="section-title">Поиск скина</div>
+    <input type="text" id="searchInput" placeholder="ID или имя..." onkeypress="if(event.key==='Enter')doSearch()">
+    <button class="btn btn-primary" onclick="doSearch()">🔍 Найти</button>
+
+    <div id="status" class="status hidden"></div>
+
+    <script>
+        const tg = window.Telegram?.WebApp;
+        if (tg) { tg.ready(); tg.expand(); }
+
+        function openBot(cmd) {
+            const botName = tg?.initDataUnsafe?.bot?.username || 'pweper_bot';
+            window.open('https://t.me/' + botName + '?start=' + encodeURIComponent(cmd.replace(/\//g,'_')), '_blank');
+            showStatus('✅ Команда отправлена!');
+        }
+
+        function doSearch() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (!q) return;
+            openBot('/search ' + q);
+        }
+
+        function showStatus(msg) {
+            const el = document.getElementById('status');
+            el.textContent = msg;
+            el.className = 'status status-ok';
+            setTimeout(() => el.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>
